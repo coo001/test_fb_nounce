@@ -11,10 +11,10 @@ interface Props {
   onNew: () => void;
 }
 
-const UNCLEAR_TYPES = new Set(["ㅅ 계열 불명확", "종성 약화", "sub"]);
+const UNCLEAR_TYPES = new Set(["ㅅ 계열 불명확", "종성 약화/탈락", "종성 약화", "sub"]);
 
 export default function ResultCard({ sentence, result, audioBlob, onRetry, onNew }: Props) {
-  const { transcript, alignment, candidates, advice } = result;
+  const { transcript, alignment, candidates, advice, next_practice, relevance } = result;
 
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   useEffect(() => {
@@ -27,12 +27,26 @@ export default function ResultCard({ sentence, result, audioBlob, onRetry, onNew
     return () => URL.revokeObjectURL(url);
   }, [audioBlob]);
 
+  const isUnrelated = relevance?.label === "unrelated";
+
   return (
     <div className="flex flex-col gap-6 w-full max-w-lg">
       <div className="text-center">
         <p className="text-xs text-gray-400 uppercase tracking-wide mb-1">원문</p>
         <p className="text-lg font-semibold text-gray-700">{sentence}</p>
       </div>
+
+      {/* 무관도 경고 (전혀 다른 문장이 인식된 경우) */}
+      {isUnrelated && (
+        <div className="bg-amber-50 border-2 border-amber-300 rounded-xl p-5 flex flex-col gap-2">
+          <p className="text-sm font-bold text-amber-700">⚠ 원문과 다른 음성으로 인식되었습니다</p>
+          <p className="text-sm text-amber-800">
+            정렬 일치율 {Math.round((relevance.match_ratio ?? 0) * 100)}%
+            ({relevance.match_syllables}/{relevance.expected_syllables} 음절 일치).
+            원문과 다른 문장을 읽으셨거나, 마이크/주변 환경 문제로 인식이 어려운 상태일 수 있습니다.
+          </p>
+        </div>
+      )}
 
       {/* 내가 녹음한 음성 */}
       {audioUrl && (
@@ -42,14 +56,19 @@ export default function ResultCard({ sentence, result, audioBlob, onRetry, onNew
         </div>
       )}
 
-      {/* 나의 발음 (STT가 들은 텍스트) */}
+      {/* STT가 들은 텍스트 */}
       <div className="bg-gray-50 rounded-xl p-4">
         <p className="text-xs text-gray-400 uppercase tracking-wide mb-2">STT가 들은 텍스트</p>
         <p className="text-base text-gray-800">{transcript}</p>
+        {relevance && !isUnrelated && (
+          <p className="text-xs text-gray-400 mt-2">
+            일치율 {Math.round(relevance.match_ratio * 100)}% — {relevance.label === "match" ? "정상" : "일부 불명확"}
+          </p>
+        )}
       </div>
 
-      {/* 음절 비교 */}
-      {alignment.length > 0 && (
+      {/* 음절 비교 — unrelated 인 경우 큰 의미가 없으므로 숨김 */}
+      {!isUnrelated && alignment.length > 0 && (
         <div className="bg-gray-50 rounded-xl p-4">
           <p className="text-xs text-gray-400 uppercase tracking-wide mb-3">음절 비교</p>
           <div className="flex flex-wrap gap-1">
@@ -80,9 +99,17 @@ export default function ResultCard({ sentence, result, audioBlob, onRetry, onNew
       )}
 
       {/* 피드백 */}
-      <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 flex flex-col gap-2">
-        <p className="text-xs text-blue-400 uppercase tracking-wide">피드백</p>
-        <p className="text-base text-blue-900 font-medium">{advice.focus}</p>
+      <div className={`rounded-xl p-4 flex flex-col gap-2 border ${
+        isUnrelated
+          ? "bg-gray-50 border-gray-200"
+          : "bg-blue-50 border-blue-200"
+      }`}>
+        <p className={`text-xs uppercase tracking-wide ${isUnrelated ? "text-gray-400" : "text-blue-400"}`}>
+          {isUnrelated ? "안내" : "피드백"}
+        </p>
+        <p className={`text-base font-medium ${isUnrelated ? "text-gray-800" : "text-blue-900"}`}>
+          {advice.focus}
+        </p>
       </div>
 
       {/* 연습 방법 */}
@@ -100,11 +127,28 @@ export default function ResultCard({ sentence, result, audioBlob, onRetry, onNew
         </div>
       )}
 
+      {/* 연습 단어 */}
+      {!isUnrelated && next_practice?.practice_words?.length > 0 && (
+        <div className="bg-gray-50 rounded-xl p-4">
+          <p className="text-xs text-gray-400 uppercase tracking-wide mb-2">연습 단어</p>
+          <div className="flex flex-wrap gap-2">
+            {next_practice.practice_words.map((w, i) => (
+              <span
+                key={i}
+                className="inline-block px-3 py-1 bg-white border border-gray-200 rounded-md text-sm text-gray-700"
+              >
+                {w}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* 다음 연습 문장 */}
-      {advice.next_sentence && (
+      {!isUnrelated && next_practice?.next_sentence && (
         <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
           <p className="text-xs text-amber-500 uppercase tracking-wide mb-2">다음 연습 문장</p>
-          <p className="text-lg font-semibold text-amber-900">{advice.next_sentence}</p>
+          <p className="text-lg font-semibold text-amber-900">{next_practice.next_sentence}</p>
         </div>
       )}
 

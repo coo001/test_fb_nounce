@@ -34,10 +34,18 @@ class NextPractice(BaseModel):
     next_sentence: str | None = None
 
 
+class Relevance(BaseModel):
+    label: str  # "match" | "partial" | "unrelated"
+    match_ratio: float
+    expected_syllables: int
+    match_syllables: int
+
+
 class AnalysisResponse(BaseModel):
     """POST /api/v1/analyze 응답 스키마.
 
     transcript 는 STT 가 인지한 텍스트(= 청자 프록시)이며 발음의 정답이 아니다.
+    relevance.label == "unrelated" 인 경우 classifier/coach/next_practice 는 건너뛴다.
     """
 
     transcript: str
@@ -46,3 +54,4 @@ class AnalysisResponse(BaseModel):
     classifications: list[Classification]
     advice: Advice
     next_practice: NextPractice
+    relevance: Relevance
