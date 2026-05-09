@@ -1,0 +1,17 @@
+{
+  "id": "c003",
+  "expected_text": "사슴 다섯 마리가 산을 달린다",
+  "expected_sentence_id": "s2",
+  "audio_file": "audio.wav",
+  "speaker_intent": "demonstrate_pattern",
+  "intended_pattern_ids": ["FINAL_CONSONANT_DROP"],
+  "gold_transcript": "",
+  "human_label": {
+    "errors": [],
+    "overall_assessment": "",
+    "intelligibility_1to5": null,
+    "labeled_by": "",
+    "labeled_at": null,
+    "notes": "파일명 s2_final_drop.wav 기준: 종성을 의도적으로 약화/탈락시킨 케이스로 추정"
+  }
+}

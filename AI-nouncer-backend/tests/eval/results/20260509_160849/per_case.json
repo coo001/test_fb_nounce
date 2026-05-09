@@ -1,0 +1,357 @@
+{
+  "args": {
+    "with_llm": false,
+    "no_stt_prompt": false,
+    "cases_dir": "C:\\dev\\ai12\\AI-nouncer-backend\\tests\\cases"
+  },
+  "rows": [
+    {
+      "case_id": "c001",
+      "expected": "삼촌은 신선한 생선을 사셨다",
+      "perceived": "삼촌은 신선한 생선을 사셨다.",
+      "alignment_brief": [
+        {
+          "e": "삼",
+          "h": "삼",
+          "t": "match"
+        },
+        {
+          "e": "촌",
+          "h": "촌",
+          "t": "match"
+        },
+        {
+          "e": "은",
+          "h": "은",
+          "t": "match"
+        },
+        {
+          "e": "신",
+          "h": "신",
+          "t": "match"
+        },
+        {
+          "e": "선",
+          "h": "선",
+          "t": "match"
+        },
+        {
+          "e": "한",
+          "h": "한",
+          "t": "match"
+        },
+        {
+          "e": "생",
+          "h": "생",
+          "t": "match"
+        },
+        {
+          "e": "선",
+          "h": "선",
+          "t": "match"
+        },
+        {
+          "e": "을",
+          "h": "을",
+          "t": "match"
+        },
+        {
+          "e": "사",
+          "h": "사",
+          "t": "match"
+        },
+        {
+          "e": "셨",
+          "h": "셨",
+          "t": "match"
+        },
+        {
+          "e": "다",
+          "h": "다",
+          "t": "match"
+        }
+      ],
+      "rule_candidates": [],
+      "classifications": [],
+      "predicted_patterns": [],
+      "gold_patterns": [],
+      "exact_match": true,
+      "tp": [],
+      "fp": [],
+      "fn": []
+    },
+    {
+      "case_id": "c002",
+      "expected": "삼촌은 신선한 생선을 사셨다",
+      "perceived": "삼촌은 진정한 갱전을 사셨다.",
+      "alignment_brief": [
+        {
+          "e": "삼",
+          "h": "삼",
+          "t": "match"
+        },
+        {
+          "e": "촌",
+          "h": "촌",
+          "t": "match"
+        },
+        {
+          "e": "은",
+          "h": "은",
+          "t": "match"
+        },
+        {
+          "e": "신",
+          "h": "진",
+          "t": "ㅅ 계열 불명확"
+        },
+        {
+          "e": "선",
+          "h": "정",
+          "t": "ㅅ 계열 불명확"
+        },
+        {
+          "e": "한",
+          "h": "한",
+          "t": "match"
+        },
+        {
+          "e": "생",
+          "h": "갱",
+          "t": "ㅅ 계열 불명확"
+        },
+        {
+          "e": "선",
+          "h": "전",
+          "t": "ㅅ 계열 불명확"
+        },
+        {
+          "e": "을",
+          "h": "을",
+          "t": "match"
+        },
+        {
+          "e": "사",
+          "h": "사",
+          "t": "match"
+        },
+        {
+          "e": "셨",
+          "h": "셨",
+          "t": "match"
+        },
+        {
+          "e": "다",
+          "h": "다",
+          "t": "match"
+        }
+      ],
+      "rule_candidates": [
+        {
+          "index": 3,
+          "expected": "신",
+          "heard": "진",
+          "type": "ㅅ 계열 불명확",
+          "pattern_id": "S_SERIES_UNCLEAR"
+        },
+        {
+          "index": 4,
+          "expected": "선",
+          "heard": "정",
+          "type": "ㅅ 계열 불명확",
+          "pattern_id": "S_SERIES_UNCLEAR"
+        },
+        {
+          "index": 6,
+          "expected": "생",
+          "heard": "갱",
+          "type": "ㅅ 계열 불명확",
+          "pattern_id": "S_SERIES_UNCLEAR"
+        },
+        {
+          "index": 7,
+          "expected": "선",
+          "heard": "전",
+          "type": "ㅅ 계열 불명확",
+          "pattern_id": "S_SERIES_UNCLEAR"
+        }
+      ],
+      "classifications": [
+        {
+          "position": 3,
+          "pattern_id": "S_SERIES_UNCLEAR",
+          "evidence": "신→진",
+          "confidence": 1.0,
+          "source": "rule"
+        },
+        {
+          "position": 4,
+          "pattern_id": "S_SERIES_UNCLEAR",
+          "evidence": "선→정",
+          "confidence": 1.0,
+          "source": "rule"
+        },
+        {
+          "position": 6,
+          "pattern_id": "S_SERIES_UNCLEAR",
+          "evidence": "생→갱",
+          "confidence": 1.0,
+          "source": "rule"
+        },
+        {
+          "position": 7,
+          "pattern_id": "S_SERIES_UNCLEAR",
+          "evidence": "선→전",
+          "confidence": 1.0,
+          "source": "rule"
+        }
+      ],
+      "predicted_patterns": [
+        "S_SERIES_UNCLEAR"
+      ],
+      "gold_patterns": [
+        "S_SERIES_UNCLEAR"
+      ],
+      "exact_match": true,
+      "tp": [
+        "S_SERIES_UNCLEAR"
+      ],
+      "fp": [],
+      "fn": []
+    },
+    {
+      "case_id": "c003",
+      "expected": "사슴 다섯 마리가 산을 달린다",
+      "perceived": "사슴 다섯 마리가 사을 달이다",
+      "alignment_brief": [
+        {
+          "e": "사",
+          "h": "사",
+          "t": "match"
+        },
+        {
+          "e": "슴",
+          "h": "슴",
+          "t": "match"
+        },
+        {
+          "e": "다",
+          "h": "다",
+          "t": "match"
+        },
+        {
+          "e": "섯",
+          "h": "섯",
+          "t": "match"
+        },
+        {
+          "e": "마",
+          "h": "마",
+          "t": "match"
+        },
+        {
+          "e": "리",
+          "h": "리",
+          "t": "match"
+        },
+        {
+          "e": "가",
+          "h": "가",
+          "t": "match"
+        },
+        {
+          "e": "산",
+          "h": "사",
+          "t": "종성 약화/탈락"
+        },
+        {
+          "e": "을",
+          "h": "을",
+          "t": "match"
+        },
+        {
+          "e": "달",
+          "h": "달",
+          "t": "match"
+        },
+        {
+          "e": "린",
+          "h": "이",
+          "t": "종성 약화/탈락"
+        },
+        {
+          "e": "다",
+          "h": "다",
+          "t": "match"
+        }
+      ],
+      "rule_candidates": [
+        {
+          "index": 7,
+          "expected": "산",
+          "heard": "사",
+          "type": "종성 약화/탈락",
+          "pattern_id": "FINAL_CONSONANT_DROP"
+        },
+        {
+          "index": 10,
+          "expected": "린",
+          "heard": "이",
+          "type": "종성 약화/탈락",
+          "pattern_id": "FINAL_CONSONANT_DROP"
+        }
+      ],
+      "classifications": [
+        {
+          "position": 7,
+          "pattern_id": "FINAL_CONSONANT_DROP",
+          "evidence": "산→사",
+          "confidence": 1.0,
+          "source": "rule"
+        },
+        {
+          "position": 10,
+          "pattern_id": "FINAL_CONSONANT_DROP",
+          "evidence": "린→이",
+          "confidence": 1.0,
+          "source": "rule"
+        }
+      ],
+      "predicted_patterns": [
+        "FINAL_CONSONANT_DROP"
+      ],
+      "gold_patterns": [
+        "FINAL_CONSONANT_DROP"
+      ],
+      "exact_match": true,
+      "tp": [
+        "FINAL_CONSONANT_DROP"
+      ],
+      "fp": [],
+      "fn": []
+    }
+  ],
+  "agg": {
+    "n": 3,
+    "exact_match": 3,
+    "exact_match_rate": 1.0,
+    "per_pattern": {
+      "S_SERIES_UNCLEAR": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0
+      },
+      "FINAL_CONSONANT_DROP": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0,
+        "tp": 1,
+        "fp": 0,
+        "fn": 0
+      }
+    }
+  }
+}

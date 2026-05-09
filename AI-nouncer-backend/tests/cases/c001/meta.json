@@ -1,0 +1,24 @@
+{
+  "id": "c001",
+  "expected_text": "삼촌은 신선한 생선을 사셨다",
+  "expected_sentence_id": "s1",
+  "audio_file": "audio.wav",
+  "speaker_intent": "normal",
+  "intended_pattern_ids": [],
+  "gold_transcript": "",
+  "human_label": {
+    "errors": [],
+    "overall_assessment": "",
+    "intelligibility_1to5": null,
+    "labeled_by": "",
+    "labeled_at": null,
+    "notes": ""
+  },
+  "schema_doc": {
+    "speaker_intent": "normal | demonstrate_pattern",
+    "intended_pattern_ids": "발화자가 의도적으로 시연한 오류 패턴 ID 리스트(있을 경우)",
+    "gold_transcript": "이상적 STT라면 출력해야 할 텍스트. 발음 자체에 오류가 있으면 인지된 그대로 적기.",
+    "human_label.errors": "[{position:int, pattern_id:str, note:str}] — position은 정답 음절 인덱스, pattern_id는 error_patterns.json의 id",
+    "human_label.intelligibility_1to5": "1=알아듣기 매우 힘듦 ~ 5=완벽히 명료"
+  }
+}

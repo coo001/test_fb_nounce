@@ -1,23 +1,37 @@
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 
 from app.routers.sentences import BY_ID
-from app.schemas.analysis import Advice, AnalysisResponse
-from app.services import aligner, coach, detector, stt
+from app.schemas.analysis import (
+    Advice,
+    AnalysisResponse,
+    Classification,
+    NextPractice,
+)
+from app.services import aligner, coach, detector, next_practice, stt
+from app.services.classifier import classify
 
 router = APIRouter(tags=["analyze"])
 
 
 async def _evaluate(audio: UploadFile, expected: str) -> AnalysisResponse:
     audio_bytes = await audio.read()
-    transcript = stt.transcribe(audio_bytes, filename=audio.filename or "audio.webm")
-    alignment = aligner.align(expected, transcript)
-    candidates = detector.detect_candidates(alignment)
-    advice = coach.coach(expected, transcript, candidates)
+    perceived = stt.transcribe(
+        audio_bytes,
+        filename=audio.filename or "audio.webm",
+        expected=expected,
+    )
+    alignment = aligner.align(expected, perceived)
+    rule_candidates = detector.detect_candidates(alignment)
+    classifications = classify(expected, perceived, alignment, rule_candidates)
+    advice = coach.coach(expected, perceived, classifications)
+    nxt = next_practice.build_next_practice(classifications, alignment)
     return AnalysisResponse(
-        transcript=transcript,
+        transcript=perceived,
         alignment=alignment,
-        candidates=candidates,
+        candidates=rule_candidates,
+        classifications=[Classification(**c) for c in classifications],
         advice=Advice(**advice),
+        next_practice=NextPractice(**nxt),
     )
 
 

@@ -1,0 +1,17 @@
+{
+  "id": "c002",
+  "expected_text": "삼촌은 신선한 생선을 사셨다",
+  "expected_sentence_id": "s1",
+  "audio_file": "audio.wav",
+  "speaker_intent": "demonstrate_pattern",
+  "intended_pattern_ids": ["S_SERIES_UNCLEAR"],
+  "gold_transcript": "",
+  "human_label": {
+    "errors": [],
+    "overall_assessment": "",
+    "intelligibility_1to5": null,
+    "labeled_by": "",
+    "labeled_at": null,
+    "notes": "파일명 s1_s_initial.wav 기준: ㅅ 계열 초성을 의도적으로 흐리게 발음한 케이스로 추정"
+  }
+}
