@@ -1,18 +1,31 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { AnalysisResponse } from "@/types/analysis";
 
 interface Props {
   sentence: string;
   result: AnalysisResponse;
+  audioBlob: Blob | null;
   onRetry: () => void;
   onNew: () => void;
 }
 
 const UNCLEAR_TYPES = new Set(["ㅅ 계열 불명확", "종성 약화", "sub"]);
 
-export default function ResultCard({ sentence, result, onRetry, onNew }: Props) {
+export default function ResultCard({ sentence, result, audioBlob, onRetry, onNew }: Props) {
   const { transcript, alignment, candidates, advice } = result;
+
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  useEffect(() => {
+    if (!audioBlob) {
+      setAudioUrl(null);
+      return;
+    }
+    const url = URL.createObjectURL(audioBlob);
+    setAudioUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [audioBlob]);
 
   return (
     <div className="flex flex-col gap-6 w-full max-w-lg">
@@ -21,9 +34,17 @@ export default function ResultCard({ sentence, result, onRetry, onNew }: Props) 
         <p className="text-lg font-semibold text-gray-700">{sentence}</p>
       </div>
 
-      {/* 나의 발음 */}
+      {/* 내가 녹음한 음성 */}
+      {audioUrl && (
+        <div className="bg-gray-50 rounded-xl p-4">
+          <p className="text-xs text-gray-400 uppercase tracking-wide mb-2">내가 녹음한 음성</p>
+          <audio controls src={audioUrl} className="w-full" />
+        </div>
+      )}
+
+      {/* 나의 발음 (STT가 들은 텍스트) */}
       <div className="bg-gray-50 rounded-xl p-4">
-        <p className="text-xs text-gray-400 uppercase tracking-wide mb-2">나의 발음</p>
+        <p className="text-xs text-gray-400 uppercase tracking-wide mb-2">STT가 들은 텍스트</p>
         <p className="text-base text-gray-800">{transcript}</p>
       </div>
 

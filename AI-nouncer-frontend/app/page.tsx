@@ -15,6 +15,7 @@ export default function Home() {
   const [selected, setSelected] = useState<Sentence | null>(null);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<AnalysisResponse | null>(null);
+  const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -26,12 +27,14 @@ export default function Home() {
   function handleSelect(sentence: Sentence) {
     setSelected(sentence);
     setResult(null);
+    setAudioBlob(null);
     setError(null);
     setStage("recording");
   }
 
   async function handleAudio(blob: Blob) {
     if (!selected) return;
+    setAudioBlob(blob);
     setLoading(true);
     setError(null);
     try {
@@ -70,6 +73,7 @@ export default function Home() {
         <ResultCard
           sentence={selected.text}
           result={result}
+          audioBlob={audioBlob}
           onRetry={() => setStage("recording")}
           onNew={() => setStage("select")}
         />
