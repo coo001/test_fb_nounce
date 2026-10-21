@@ -32,6 +32,7 @@ class NextPractice(BaseModel):
     focus_pattern_id: str | None = None
     practice_words: list[str] = []
     next_sentence: str | None = None
+    mode: str = "remediation"  # "remediation" (오류 교정) | "challenge" (정상 발음 시 다음 단계)
 
 
 class Relevance(BaseModel):

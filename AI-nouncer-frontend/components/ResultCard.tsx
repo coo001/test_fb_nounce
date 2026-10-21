@@ -2,18 +2,21 @@
 
 import { useEffect, useState } from "react";
 import { AnalysisResponse } from "@/types/analysis";
+import FeedbackForm from "@/components/FeedbackForm";
 
 interface Props {
   sentence: string;
+  sentenceId?: string;
   result: AnalysisResponse;
   audioBlob: Blob | null;
+  sessionId: string;
   onRetry: () => void;
   onNew: () => void;
 }
 
 const UNCLEAR_TYPES = new Set(["ㅅ 계열 불명확", "종성 약화/탈락", "종성 약화", "sub"]);
 
-export default function ResultCard({ sentence, result, audioBlob, onRetry, onNew }: Props) {
+export default function ResultCard({ sentence, sentenceId, result, audioBlob, sessionId, onRetry, onNew }: Props) {
   const { transcript, alignment, candidates, advice, next_practice, relevance } = result;
 
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
@@ -130,7 +133,9 @@ export default function ResultCard({ sentence, result, audioBlob, onRetry, onNew
       {/* 연습 단어 */}
       {!isUnrelated && next_practice?.practice_words?.length > 0 && (
         <div className="bg-gray-50 rounded-xl p-4">
-          <p className="text-xs text-gray-400 uppercase tracking-wide mb-2">연습 단어</p>
+          <p className="text-xs text-gray-400 uppercase tracking-wide mb-2">
+            {next_practice.mode === "challenge" ? "다음 도전 단어" : "연습 단어"}
+          </p>
           <div className="flex flex-wrap gap-2">
             {next_practice.practice_words.map((w, i) => (
               <span
@@ -144,12 +149,45 @@ export default function ResultCard({ sentence, result, audioBlob, onRetry, onNew
         </div>
       )}
 
-      {/* 다음 연습 문장 */}
+      {/* 다음 연습 문장 — remediation: 황색, challenge: 녹색 */}
       {!isUnrelated && next_practice?.next_sentence && (
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-          <p className="text-xs text-amber-500 uppercase tracking-wide mb-2">다음 연습 문장</p>
-          <p className="text-lg font-semibold text-amber-900">{next_practice.next_sentence}</p>
+        <div
+          className={
+            next_practice.mode === "challenge"
+              ? "bg-emerald-50 border border-emerald-200 rounded-xl p-4"
+              : "bg-amber-50 border border-amber-200 rounded-xl p-4"
+          }
+        >
+          <p
+            className={
+              next_practice.mode === "challenge"
+                ? "text-xs text-emerald-600 uppercase tracking-wide mb-2"
+                : "text-xs text-amber-500 uppercase tracking-wide mb-2"
+            }
+          >
+            {next_practice.mode === "challenge" ? "잘하셨어요 — 다음 도전 문장" : "다음 연습 문장"}
+          </p>
+          <p
+            className={
+              next_practice.mode === "challenge"
+                ? "text-lg font-semibold text-emerald-900"
+                : "text-lg font-semibold text-amber-900"
+            }
+          >
+            {next_practice.next_sentence}
+          </p>
         </div>
+      )}
+
+      {/* 평가 위젯 */}
+      {sessionId && (
+        <FeedbackForm
+          sessionId={sessionId}
+          sentenceId={sentenceId}
+          expectedText={sentence}
+          perceivedText={transcript}
+          relevanceLabel={relevance?.label}
+        />
       )}
 
       {/* 버튼 */}

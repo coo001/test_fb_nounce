@@ -46,7 +46,7 @@ async def _evaluate(audio: UploadFile, expected: str) -> AnalysisResponse:
     rule_candidates = detector.detect_candidates(alignment)
     classifications = classify(expected, perceived, alignment, rule_candidates)
     advice = coach.coach(expected, perceived, classifications)
-    nxt = next_practice.build_next_practice(classifications, alignment)
+    nxt = next_practice.build_next_practice(classifications, alignment, expected)
     return AnalysisResponse(
         transcript=perceived,
         alignment=alignment,

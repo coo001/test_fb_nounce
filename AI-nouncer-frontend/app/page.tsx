@@ -17,6 +17,16 @@ export default function Home() {
   const [result, setResult] = useState<AnalysisResponse | null>(null);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [sessionId, setSessionId] = useState<string>("");
+
+  useEffect(() => {
+    let id = localStorage.getItem("ai_nouncer_session_id");
+    if (!id) {
+      id = (crypto.randomUUID && crypto.randomUUID()) || `s-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+      localStorage.setItem("ai_nouncer_session_id", id);
+    }
+    setSessionId(id);
+  }, []);
 
   useEffect(() => {
     fetchSentences()
@@ -72,8 +82,10 @@ export default function Home() {
       {stage === "result" && result && selected && (
         <ResultCard
           sentence={selected.text}
+          sentenceId={selected.id}
           result={result}
           audioBlob={audioBlob}
+          sessionId={sessionId}
           onRetry={() => setStage("recording")}
           onNew={() => setStage("select")}
         />

@@ -1,6 +1,10 @@
+export type LengthTier = "short" | "long" | "paragraph";
+
 export interface Sentence {
   id: string;
   text: string;
+  length_tier?: LengthTier;
+  target_patterns?: string[];
 }
 
 export interface AlignmentItem {
@@ -30,10 +34,13 @@ export interface Advice {
   drills: string[];
 }
 
+export type PracticeMode = "remediation" | "challenge";
+
 export interface NextPractice {
   focus_pattern_id?: string | null;
   practice_words: string[];
   next_sentence?: string | null;
+  mode?: PracticeMode;
 }
 
 export interface Relevance {
